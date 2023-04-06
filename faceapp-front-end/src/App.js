@@ -65,10 +65,26 @@ class App extends Component{
       imageUrl: '',
       box: {},
       route: 'sigin',
-      isSignedIn: false
+      isSignedIn: false,
+      user :{
+        id: '',
+        name: '',
+        email: '',
+        entries: 0, 
+        joined: ''
+      }
     }
   }
 
+  loadUser =(data) => {
+    this.setState ({user: {
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries, 
+      joined: data.joined
+    }})
+  }
 
 
   calculateFaceLocation = (data) => {
@@ -98,7 +114,6 @@ class App extends Component{
     fetch("https://api.clarifai.com/v2/models/" + 'face-detection'  + "/outputs", returnClarifaiRequestOptions(this.state.input))
     .then(response => response.json())
     .then(response => {
-      console.log('hi', response)
       if(response) {
         fetch('http://localhost:3000/image', {
           method: 'put',
@@ -112,8 +127,9 @@ class App extends Component{
           this.setState(Object.assign(this.state.user, { entries: count}))
         })
       }
+      this.displayFaceBox(this.calculateFaceLocation(response))
     })
-
+    .catch(err => console.log(err));
   }
 
   onRouteChange = (route) => {
@@ -147,7 +163,7 @@ class App extends Component{
          : (
           route === 'signin' 
           ? <SignIn onRouteChange = {this.onRouteChange}/>  
-          : <Register onRouteChange={this.onRouteChange}/> 
+          : <Register loadUser = {this.loadUser} onRouteChange={this.onRouteChange}/> 
         )
       }
     </div>

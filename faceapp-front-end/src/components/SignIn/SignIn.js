@@ -1,7 +1,6 @@
 import React from "react";
 
 class SignIn extends React.Component{
-
     constructor(props) {
         super(props);
         this.state = {
@@ -35,10 +34,7 @@ class SignIn extends React.Component{
                     this.props.onRouteChange('home');
             }
         })
-}
-
-
-
+    }
     render() {
         const { onRouteChange } = this.props;
         return (
